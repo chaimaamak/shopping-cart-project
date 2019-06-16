@@ -2,7 +2,6 @@
 
 import datetime
 import os
-import statistics
 
 from pprint import pprint
 
@@ -11,7 +10,7 @@ def to_usd(my_price):
 
 now = datetime.datetime.now()
 
-# DATA SETUP
+## DATA SETUP
 
 products = [
     {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50},
@@ -41,60 +40,78 @@ products = [
 
 ## INFORMATION CAPTURE  #> Prompts user for input to select from list of inventory
 
-subtotal = 0
-tax = 0
-total_price = 0
-valid_ids = [str(i['id']) for i in products]
-selected_ids = []
+valid_ids = [str(i['id']) for i in products]   #> Identifies list of valid ids in the products list provided using list comprehension
 
-while True:
-    product_id = input("Please enter product ID, or 'Done' if there are no more products:") #>string type
-    
-    if product_id.lower() == "done":
-        break
-    elif product_id in valid_ids:
-        selected_ids.append(int(product_id))
-    else:
-        print ("Invalid Entry. Try Again!")
+def input_products():
+    selected_ids = []
+    while True:
+        product_id = input("Please enter product ID, or 'Done' if there are no more products:") #>string type
+        
+        if product_id.lower() == "done":
+            break
+        elif product_id in valid_ids:
+            selected_ids.append(int(product_id))
+        else:
+            print ("Invalid Entry. Try Again!")
+    return selected_ids
 
 ## INFORMATION DISPLAY #> Calculate total cost and apply tax
 
-print("HAPPY FOODS")
-print("WWW.HAPPY-FOODS.COM")
-print("---------------------------------")
-print("CHECKOUT AT:" + now.strftime("%Y-%m-%d %H:%M:%S"))
-print("---------------------------------")
-print("SELECTED PRODUCTS:")
+def format_products(selected_ids):  #> Formatting my selected products into text
+    text = ''
+    for product_id in selected_ids:
+        matching_products = [item for item in products if item["id"] == product_id] #>convert string to integer for comparison reasons
+        matching_product = matching_products[0]
+        text = text + '\n...' + matching_product["name"] + " " + str(matching_product["price"])
+    return text
 
-for product_id in selected_ids:
-    matching_products = [item for item in products if item["id"] == product_id] #>convert string to integer for comparison reasons
-    matching_product = matching_products[0]
-    subtotal = subtotal + matching_product["price"]
-    tax = tax + subtotal * 0.0875
-    print("..." + matching_product["name"] + " " + str(matching_product["price"]))
-
-total_price = tax + subtotal
-print ("---------------------------------")
-print ("SUBTOTAL: " + to_usd(subtotal)) # format to USD
-print ("TAX: " + to_usd(tax)) # format to USD
-print ("TOTAL: " + to_usd(total_price)) # format to USD
-print ("---------------------------------")
-print ("THANKS, SEE YOU AGAIN SOON!")
-print ("---------------------------------")
-
-## Accept or Reject Transaction #> Prompt user to accept or alter the current items list
-
-user_decision = input ("Do You Accept or Reject This Transaction?")
-
-if user_decision.lower() == "accept":
-    print("Would You Like to Print or Email Your Receipt?")
-elif user_decision.lower() == "reject":
-    print (product_id) ### FIGURE THIS OUT
-
-
-## RECEIPT #> Prompt user to either print a hard copy of the receipt or send it to their email address
-
+def final_price(selected_ids):
+    subtotal = 0
+    tax = 0
+    total_price = 0
+    for product_id in selected_ids:
+        matching_products = [item for item in products if item["id"] == product_id] #>convert string to integer for comparison reasons
+        matching_product = matching_products[0]
+        subtotal = subtotal + matching_product["price"]
+        tax = tax + subtotal * 0.0875
+    total_price = tax + subtotal
+    return subtotal, tax, total_price
     
+def format_text(selected_ids):  #> Returns a template 
+    text = 'HAPPY FOODS'
+    text += '\nWWW.HAPPY-FOODS.COM'
+    text += "\n---------------------------------"
+    text += "\nCHECKOUT AT:" + now.strftime("%Y-%m-%d %H:%M:%S")
+    text += "\n---------------------------------"
+    text += "\nSELECTED PRODUCTS:"
+    text += format_products(selected_ids)  
+    subtotal, tax, total_price = final_price(selected_ids)
+    text += '\n---------------------------------'
+    text += '\nSUBTOTAL: ' + to_usd(subtotal) # format to USD
+    text += '\nTAX: ' + to_usd(tax) # format to USD
+    text += '\nTOTAL: ' + to_usd(total_price) # format to USD
+    text += '\n---------------------------------'
+    text += '\nTHANKS, SEE YOU AGAIN SOON!'
+    text += '\n---------------------------------'
+    return text
+
+while True:
+    selected_ids = input_products()
+    print (format_text(selected_ids))
+
+    ## Accept or Reject Transaction #> Prompt user to accept or alter the current items list
+
+    user_decision = input ("Do You Accept or Reject This Transaction? (Accept/Reject)")
+
+    if user_decision.lower() == "accept":
+        email_print_decision = input("Would You Like an Email Receipt? (Yes/No)")
+        if email_print_decision.lower() == "no":
+            print (format_text(selected_ids))
+        if email_print_decision.lower() == "yes":
+            email_address = input ("Enter Your Email:")  #### FIGURE THIS OUT!!!!
+        break
+    elif user_decision.lower() == "reject":
+        print ("Let's Start Over!")
 
 
 
