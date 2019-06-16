@@ -1,9 +1,15 @@
 # shopping_cart.py
 
+import datetime
+import os
+import statistics
+
 from pprint import pprint
 
 def to_usd(my_price):
     return "${0:,.2f}".format(my_price)
+
+now = datetime.datetime.now()
 
 # DATA SETUP
 
@@ -35,41 +41,45 @@ products = [
 
 ## INFORMATION CAPTURE  #> Prompts user for input to select from list of inventory
 
+subtotal = 0
+tax = 0
 total_price = 0
+valid_ids = [str(i['id']) for i in products]
+selected_ids = []
 
 while True:
     product_id = input("Please enter product ID, or 'Done' if there are no more products:") #>string type
     
-    if product_id == "Done":
+    if product_id.lower() == "done":
         break
+    elif product_id in valid_ids:
+        selected_ids.append(int(product_id))
     else:
-        matching_products = [item for item in products if item["id"] == int(product_id)] #>convert string to integer for comparison reasons
-        matching_product = matching_products[0]
-        total_price = total_price + matching_product["price"]
-
-        print("Selected Product: " + matching_product["name"] + " " + str(matching_product["price"]))
-
-#Repeat the previous step, but instead of printing each user input, store them all in a single list. Then print the list after the user is "DONE".
-
-## Append Items  #> Keeps an up to date list of items selected and displays them
+        print ("Invalid Entry. Try Again!")
 
 ## INFORMATION DISPLAY #> Calculate total cost and apply tax
 
-
-
-print ("Total Price: " + str(total_price)) # Format at
+for product_id in selected_ids:
+    matching_products = [item for item in products if item["id"] == product_id] #>convert string to integer for comparison reasons
+    matching_product = matching_products[0]
+    subtotal = subtotal + matching_product["price"]
+    tax = tax + subtotal * 0.0875
+    print("..." + matching_product["name"] + " " + str(matching_product["price"]))
 
 ## Accept or Reject Transaction #> Prompt user to accept or alter the current items list
 
+
+
 ## RECEIPT #> Prompt user to either print a hard copy of the receipt or send it to their email address
 
+total_price = tax + subtotal
 
-#> print("GREEN FOODS GROCERY")
-#> print("WWW.GREEN-FOODS-GROCERY.COM")
-#> print("---------------------------------")
-#> print("CHECKOUT AT:" + date() + time())
-#> print("---------------------------------")
-#> print("SELECTED PRODUCTS:")
+print("HAPPY FOODS")
+print("WWW.HAPPY-FOODS.COM")
+print("---------------------------------")
+print("CHECKOUT AT:" + now.strftime("%Y-%m-%d %H:%M:%S"))
+print("---------------------------------")
+print("SELECTED PRODUCTS:")
 #>  ... Chocolate Sandwich Cookies ($3.50)
 #>  ... Cut Russet Potatoes Steam N' Mash ($4.25)
 #>  ... Dry Nose Oil ($21.99)
@@ -77,13 +87,13 @@ print ("Total Price: " + str(total_price)) # Format at
 #>  ... Cut Russet Potatoes Steam N' Mash ($4.25)
 #>  ... Mint Chocolate Flavored Syrup ($4.50)
 #>  ... Chocolate Fudge Layer Cake ($18.50)
-#> ---------------------------------
-#> SUBTOTAL: $61.24
-#> TAX: $5.35
-#> TOTAL: $66.59
-#> ---------------------------------
-#> THANKS, SEE YOU AGAIN SOON!
-#> ---------------------------------
+print ("---------------------------------")
+print ("SUBTOTAL: " + str(subtotal)) # format to USD
+print ("TAX: " + str(tax)) # format to USD
+print ("TOTAL: " + str(total_price) # format to USD
+print ("---------------------------------")
+print ("THANKS, SEE YOU AGAIN SOON!")
+print ("---------------------------------")
 
 # PRODUCT VALIDATION
 
