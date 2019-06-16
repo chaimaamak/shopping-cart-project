@@ -2,6 +2,8 @@
 
 #from pprint import pprint
 
+# DATA SETUP
+
 products = [
     {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50},
     {"id":2, "name": "All-Seasons Salt", "department": "pantry", "aisle": "spices seasonings", "price": 4.99},
@@ -28,4 +30,37 @@ products = [
 print(products)
 # pprint(products)
 
-# TODO: write some Python code here to produce the desired output
+# PRODUCT DEVELOPMENT
+
+## User Input  >/Prompts user to select from list of inventory
+
+product_selection = input("Select Which Product You Would Like From This List:")
+
+Accept a user input value, store it in a variable, and print it. HINT: use the input() function.
+One at a time, iteratively accept a user input value, store it in a variable, and print it. HINT: use an infinite while loop. NOTE: you may have to press "control-c" to quit your script if you get stuck.
+One at a time, iteratively accept a user input value, store it in a variable, and print it. But stop the loop if the user inputs the word "DONE". HINT: use an if statement in conjunction with the break keyword.
+Repeat the previous step, but instead of printing each user input, store them all in a single list. Then print the list after the user is "DONE".
+
+
+
+## Append Items  >/Keeps an up to date list of items selected and displays them
+
+
+
+
+## Calculate Total >/Add total cost and apply tax
+
+
+
+
+## Accept or Reject Transaction >/Prompt user to accept or alter the current items list
+
+
+
+
+## Send or Print Email >/Prompt user to either print a hard copy of the receipt or send it to their email address
+
+
+# PRODUCT VALIDATION
+
+
