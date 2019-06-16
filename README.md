@@ -30,7 +30,7 @@ conda activate shopping_cart-env
 From inside the virtual environment, install package dependencies:
 
 ```sh
-pip install -r ___________
+pip install sendgrid==6.0.5
 ```
 
 # Setup

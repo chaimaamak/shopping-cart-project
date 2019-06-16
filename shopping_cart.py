@@ -78,10 +78,10 @@ def final_price(selected_ids):
     return subtotal, tax, total_price
     
 def format_text(selected_ids):  #> Returns a template 
-    text = 'HAPPY FOODS'
+    text = '---- HAPPY FOODS ----'
     text += '\nWWW.HAPPY-FOODS.COM'
     text += "\n---------------------------------"
-    text += "\nCHECKOUT AT:" + now.strftime("%Y-%m-%d %H:%M:%S")
+    text += "\nCHECKOUT AT:" + now.strftime("%Y-%m-%d %H:%M:%S")   #> Used online sample of datetime applicability
     text += "\n---------------------------------"
     text += "\nSELECTED PRODUCTS:"
     text += format_products(selected_ids)  
@@ -109,9 +109,13 @@ while True:
             print (format_text(selected_ids))
         if email_print_decision.lower() == "yes":
             email_address = input ("Enter Your Email:")  #### FIGURE THIS OUT!!!!
+            os.system ("python send_email.py")
         break
     elif user_decision.lower() == "reject":
         print ("Let's Start Over!")
+    else:
+        print ("Invalid Input. Try Again!")
+    
 
 
 
