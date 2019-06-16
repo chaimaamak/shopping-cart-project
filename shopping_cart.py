@@ -32,14 +32,39 @@ print(products)
 
 # PRODUCT DEVELOPMENT
 
-## User Input  >/Prompts user to select from list of inventory
+## Information Capture  >/Prompts user for input to select from list of inventory
 
-product_selection = input("Select Which Product You Would Like From This List:")
+product_id = input("Please enter product ID, or 'Done' if there are no more products:")
 
-Accept a user input value, store it in a variable, and print it. HINT: use the input() function.
-One at a time, iteratively accept a user input value, store it in a variable, and print it. HINT: use an infinite while loop. NOTE: you may have to press "control-c" to quit your script if you get stuck.
-One at a time, iteratively accept a user input value, store it in a variable, and print it. But stop the loop if the user inputs the word "DONE". HINT: use an if statement in conjunction with the break keyword.
-Repeat the previous step, but instead of printing each user input, store them all in a single list. Then print the list after the user is "DONE".
+#while product_id in products["id"]:
+print (product_id)
+print (type(product_id))
+#else:
+    #print("Scanning Complete")
+
+
+
+#list(product_id)  #append all entries into a list
+#
+#while product_id in products:
+#    print(product_id, list_of_products)
+#else:
+#    print ("SCANNING COMPLETE")
+    #print(list_of_products)
+
+#Accept a user input value, store it in a variable, and print it. HINT: use the input() function.
+#One at a time, iteratively accept a user input value, store it in a variable, and print it. HINT: use an infinite while loop. NOTE: you may have to press "control-c" to quit your script if you get stuck.
+#One at a time, iteratively accept a user input value, store it in a variable, and print it. But stop the loop if the user inputs the word "DONE". HINT: use an if statement in conjunction with the break keyword.
+#Repeat the previous step, but instead of printing each user input, store them all in a single list. Then print the list after the user is "DONE".
+#
+#
+#
+
+#product_ids = [1, 8, 6, 16, 6] # temporary list of valid ids for testing purposes
+#
+#print("SHOPPING CART ITEM IDENTIFIERS INCLUDE:", product_ids)
+#
+##TODO: perform product look-ups here!
 
 
 
@@ -60,6 +85,27 @@ Repeat the previous step, but instead of printing each user input, store them al
 
 ## Send or Print Email >/Prompt user to either print a hard copy of the receipt or send it to their email address
 
+
+#> GREEN FOODS GROCERY
+#> WWW.GREEN-FOODS-GROCERY.COM
+#> ---------------------------------
+#> CHECKOUT AT: 2019-06-06 11:31 AM
+#> ---------------------------------
+#> SELECTED PRODUCTS:
+#>  ... Chocolate Sandwich Cookies ($3.50)
+#>  ... Cut Russet Potatoes Steam N' Mash ($4.25)
+#>  ... Dry Nose Oil ($21.99)
+#>  ... Cut Russet Potatoes Steam N' Mash ($4.25)
+#>  ... Cut Russet Potatoes Steam N' Mash ($4.25)
+#>  ... Mint Chocolate Flavored Syrup ($4.50)
+#>  ... Chocolate Fudge Layer Cake ($18.50)
+#> ---------------------------------
+#> SUBTOTAL: $61.24
+#> TAX: $5.35
+#> TOTAL: $66.59
+#> ---------------------------------
+#> THANKS, SEE YOU AGAIN SOON!
+#> ---------------------------------
 
 # PRODUCT VALIDATION
 

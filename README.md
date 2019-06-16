@@ -1,5 +1,7 @@
 # Shopping Cart Project
 
+Facilitate Business Checkout Process
+
 Grocery store checkout program with email receipt capabilities. Accepts user input of products, adds the costs, applies tax, and prompts the user for an email address to send an automated receipt. 
 
 # Prerequisites
