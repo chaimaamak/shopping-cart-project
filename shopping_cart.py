@@ -27,20 +27,27 @@ products = [
     {"id":20, "name": "Pomegranate Cranberry & Aloe Vera Enrich Drink", "department": "beverages", "aisle": "juice nectars", "price": 4.25}
 ] # based on data from Instacart: https://www.instacart.com/datasets/grocery-shopping-2017
 
-print(products)
+#print(products)
 # pprint(products)
 
 # PRODUCT DEVELOPMENT
 
 ## Information Capture  >/Prompts user for input to select from list of inventory
 
-product_id = input("Please enter product ID, or 'Done' if there are no more products:")
 
-#while product_id in products["id"]:
-print (product_id)
-print (type(product_id))
+while True:
+    product_id = input("Please enter product ID, or 'Done' if there are no more products:") #>string type
+    
+    if product_id == "Done":
+        break
+    else:
+        matching_products = [item for item in products if item["id"] == int(product_id)] #>convert string to integer for comparison reasons
+        matching_product = matching_products[0]
+        print("Selected Product: " + matching_product["name"] + " " + str(matching_product["price"]))
 #else:
-    #print("Scanning Complete")
+#print("Scanning Complete")
+
+
 
 
 
@@ -86,12 +93,12 @@ print (type(product_id))
 ## Send or Print Email >/Prompt user to either print a hard copy of the receipt or send it to their email address
 
 
-#> GREEN FOODS GROCERY
-#> WWW.GREEN-FOODS-GROCERY.COM
-#> ---------------------------------
-#> CHECKOUT AT: 2019-06-06 11:31 AM
-#> ---------------------------------
-#> SELECTED PRODUCTS:
+#> print("GREEN FOODS GROCERY")
+#> print("WWW.GREEN-FOODS-GROCERY.COM")
+#> print("---------------------------------")
+#> print("CHECKOUT AT:" + date() + time())
+#> print("---------------------------------")
+#> print("SELECTED PRODUCTS:")
 #>  ... Chocolate Sandwich Cookies ($3.50)
 #>  ... Cut Russet Potatoes Steam N' Mash ($4.25)
 #>  ... Dry Nose Oil ($21.99)
