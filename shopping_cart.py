@@ -59,6 +59,13 @@ while True:
 
 ## INFORMATION DISPLAY #> Calculate total cost and apply tax
 
+print("HAPPY FOODS")
+print("WWW.HAPPY-FOODS.COM")
+print("---------------------------------")
+print("CHECKOUT AT:" + now.strftime("%Y-%m-%d %H:%M:%S"))
+print("---------------------------------")
+print("SELECTED PRODUCTS:")
+
 for product_id in selected_ids:
     matching_products = [item for item in products if item["id"] == product_id] #>convert string to integer for comparison reasons
     matching_product = matching_products[0]
@@ -66,35 +73,28 @@ for product_id in selected_ids:
     tax = tax + subtotal * 0.0875
     print("..." + matching_product["name"] + " " + str(matching_product["price"]))
 
-## Accept or Reject Transaction #> Prompt user to accept or alter the current items list
-
-
-
-## RECEIPT #> Prompt user to either print a hard copy of the receipt or send it to their email address
-
 total_price = tax + subtotal
-
-print("HAPPY FOODS")
-print("WWW.HAPPY-FOODS.COM")
-print("---------------------------------")
-print("CHECKOUT AT:" + now.strftime("%Y-%m-%d %H:%M:%S"))
-print("---------------------------------")
-print("SELECTED PRODUCTS:")
-#>  ... Chocolate Sandwich Cookies ($3.50)
-#>  ... Cut Russet Potatoes Steam N' Mash ($4.25)
-#>  ... Dry Nose Oil ($21.99)
-#>  ... Cut Russet Potatoes Steam N' Mash ($4.25)
-#>  ... Cut Russet Potatoes Steam N' Mash ($4.25)
-#>  ... Mint Chocolate Flavored Syrup ($4.50)
-#>  ... Chocolate Fudge Layer Cake ($18.50)
 print ("---------------------------------")
-print ("SUBTOTAL: " + str(subtotal)) # format to USD
-print ("TAX: " + str(tax)) # format to USD
-print ("TOTAL: " + str(total_price) # format to USD
+print ("SUBTOTAL: " + to_usd(subtotal)) # format to USD
+print ("TAX: " + to_usd(tax)) # format to USD
+print ("TOTAL: " + to_usd(total_price)) # format to USD
 print ("---------------------------------")
 print ("THANKS, SEE YOU AGAIN SOON!")
 print ("---------------------------------")
 
-# PRODUCT VALIDATION
+## Accept or Reject Transaction #> Prompt user to accept or alter the current items list
+
+user_decision = input ("Do You Accept or Reject This Transaction?")
+
+if user_decision.lower() == "accept":
+    print("Would You Like to Print or Email Your Receipt?")
+elif user_decision.lower() == "reject":
+    print (product_id) ### FIGURE THIS OUT
+
+
+## RECEIPT #> Prompt user to either print a hard copy of the receipt or send it to their email address
+
+    
+
 
 
