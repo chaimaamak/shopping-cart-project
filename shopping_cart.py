@@ -4,6 +4,12 @@ import os
 import datetime
 from pprint import pprint
 
+from dotenv import load_dotenv
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
+load_dotenv()
+
 def to_usd(my_price):
     return "${0:,.2f}".format(my_price)
 
@@ -94,10 +100,22 @@ def format_text(selected_ids):  #> Returns a template
     text += '\n---------------------------------'
     return text
 
+def send_email (text, user_email):
+    SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
+    #SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID", "OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
+    MY_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "OOPS, please set env var called 'MY_EMAIL_ADDRESS'")
+    message = Mail(from_email= MY_ADDRESS, to_emails = user_email, subject='This is Your Email Receipt From Happy Foods', html_content=text)
+    client = SendGridAPIClient(SENDGRID_API_KEY)
+    response = client.send(message)
+    print(response.status_code)
+    print(response.body)
+    print(response.headers)
+
 
 while True:
     selected_ids = input_products()
-    print (format_text(selected_ids))
+    text = format_text(selected_ids)
+    print (text)
 
     ## Accept or Reject Transaction #> Prompt user to accept or alter the current items list
 
@@ -107,49 +125,10 @@ while True:
         email_print_decision = input("Would You Like an Email Receipt? (Yes/No)")
         if email_print_decision.lower() == "no":
             print ("\n\nHere A Validation of Your Purchase" + format_text(selected_ids))
-        if email_print_decision.lower() == "yes":
-            import os
-            from dotenv import load_dotenv
-            from sendgrid import SendGridAPIClient
-            from sendgrid.helpers.mail import Mail
-            load_dotenv()
-            
+        if email_print_decision.lower() == "yes":          
             user_email = input ("Enter Your Email Address:")
-            
-            SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
-            SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID", "OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
-            MY_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "OOPS, please set env var called 'MY_EMAIL_ADDRESS'")
-
-            #print("API KEY:", SENDGRID_API_KEY)
-            #print("TEMPLATE ID:", SENDGRID_TEMPLATE_ID)
-            #print("EMAIL ADDRESS:", MY_ADDRESS)
-
-            template_data = {
-                "total_price_usd": to_usd(total_price),
-                "human_friendly_timestamp": now.strftime("%Y-%m-%d %H:%M:%S"),
-                "products": print (format_products(selected_ids))
-            }
-
-            client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
-            print("CLIENT:", type(client))
-
-            message = Mail(from_email=MY_ADDRESS, to_emails = MY_ADDRESS)
-            print("MESSAGE:", type(message))
-
-            message.template_id = SENDGRID_TEMPLATE_ID
-
-            message.dynamic_template_data = template_data
-
-            try:
-                response = client.send(message)
-                print("RESPONSE:", type(response))
-                print(response.status_code)
-                print(response.body)
-                print(response.headers)
-
-            except Exception as e:
-                print("OOPS", e)        
-
+            send_email(text, user_email)
+            print ("Thank You For Shopping!")
         break
     elif user_decision.lower() == "reject":
         print ("Let's Start Over!")
