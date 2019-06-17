@@ -101,12 +101,28 @@ def format_text(selected_ids):  #> Returns a template
     return text
 
 def send_email (text, user_email):
+    total_usd = final_price(selected_ids)
+
     SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
-    #SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID", "OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
+    SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID", "OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
     MY_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "OOPS, please set env var called 'MY_EMAIL_ADDRESS'")
-    message = Mail(from_email= MY_ADDRESS, to_emails = user_email, subject='This is Your Email Receipt From Happy Foods', html_content=text)
+    
+    template_data = {
+    "total_price_usd": str(total_usd),
+    "human_friendly_timestamp": now.strftime("%Y-%m-%d %H:%M:%S\n"),
+    "products":[p for p in products if str(p["id"]) == str(selected_ids)
+    ]
+}
     client = SendGridAPIClient(SENDGRID_API_KEY)
+    print("CLIENT:", type(client))
+    
+    message = Mail(from_email= MY_ADDRESS, to_emails = user_email, subject='This is Your Email Receipt From Happy Foods', html_content=text)
+    
+    message.template_id = SENDGRID_TEMPLATE_ID
+    message.dynamic_template_data = template_data
+    
     response = client.send(message)
+    print("RESPONSE:", type(response))
     print(response.status_code)
     print(response.body)
     print(response.headers)
