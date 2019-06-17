@@ -31,6 +31,7 @@ From inside the virtual environment, install package dependencies:
 
 ```sh
 pip install sendgrid==6.0.5
+pip install python-dotenv
 ```
 
 # Setup

@@ -1,8 +1,7 @@
 # shopping_cart.py
 
-import datetime
 import os
-
+import datetime
 from pprint import pprint
 
 def to_usd(my_price):
@@ -78,7 +77,7 @@ def final_price(selected_ids):
     return subtotal, tax, total_price
     
 def format_text(selected_ids):  #> Returns a template 
-    text = '---- HAPPY FOODS ----'
+    text = '\n---~~~~~~~ HAPPY FOODS ~~~~~~~---'
     text += '\nWWW.HAPPY-FOODS.COM'
     text += "\n---------------------------------"
     text += "\nCHECKOUT AT:" + now.strftime("%Y-%m-%d %H:%M:%S")   #> Used online sample of datetime applicability
@@ -95,6 +94,7 @@ def format_text(selected_ids):  #> Returns a template
     text += '\n---------------------------------'
     return text
 
+
 while True:
     selected_ids = input_products()
     print (format_text(selected_ids))
@@ -106,10 +106,50 @@ while True:
     if user_decision.lower() == "accept":
         email_print_decision = input("Would You Like an Email Receipt? (Yes/No)")
         if email_print_decision.lower() == "no":
-            print (format_text(selected_ids))
+            print ("\n\nHere A Validation of Your Purchase" + format_text(selected_ids))
         if email_print_decision.lower() == "yes":
-            email_address = input ("Enter Your Email:")  #### FIGURE THIS OUT!!!!
-            os.system ("python send_email.py")
+            import os
+            from dotenv import load_dotenv
+            from sendgrid import SendGridAPIClient
+            from sendgrid.helpers.mail import Mail
+            load_dotenv()
+            
+            user_email = input ("Enter Your Email Address:")
+            
+            SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
+            SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID", "OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
+            MY_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "OOPS, please set env var called 'MY_EMAIL_ADDRESS'")
+
+            #print("API KEY:", SENDGRID_API_KEY)
+            #print("TEMPLATE ID:", SENDGRID_TEMPLATE_ID)
+            #print("EMAIL ADDRESS:", MY_ADDRESS)
+
+            template_data = {
+                "total_price_usd": to_usd(total_price),
+                "human_friendly_timestamp": now.strftime("%Y-%m-%d %H:%M:%S"),
+                "products": print (format_products(selected_ids))
+            }
+
+            client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
+            print("CLIENT:", type(client))
+
+            message = Mail(from_email=MY_ADDRESS, to_emails = MY_ADDRESS)
+            print("MESSAGE:", type(message))
+
+            message.template_id = SENDGRID_TEMPLATE_ID
+
+            message.dynamic_template_data = template_data
+
+            try:
+                response = client.send(message)
+                print("RESPONSE:", type(response))
+                print(response.status_code)
+                print(response.body)
+                print(response.headers)
+
+            except Exception as e:
+                print("OOPS", e)        
+
         break
     elif user_decision.lower() == "reject":
         print ("Let's Start Over!")
@@ -119,3 +159,44 @@ while True:
 
 
 
+
+## EMAIL SETUP FUNCTION
+
+#def format_email(selected_ids):
+#
+#    load_dotenv()
+#
+#    SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
+#    SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID", "OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
+#    MY_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "OOPS, please set env var called 'MY_EMAIL_ADDRESS'")
+#
+#    #print("API KEY:", SENDGRID_API_KEY)
+#    #print("TEMPLATE ID:", SENDGRID_TEMPLATE_ID)
+#    #print("EMAIL ADDRESS:", MY_ADDRESS)
+#    
+#    template_data = {
+#        "total_price_usd": to_usd(total_price),
+#        "human_friendly_timestamp": now.strftime("%Y-%m-%d %H:%M:%S"),
+#        "products": print (format_products(selected_ids))
+#    }
+#
+#    client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
+#    print("CLIENT:", type(client))
+#
+#    message = Mail(from_email=MY_ADDRESS, to_emails = MY_ADDRESS)
+#    print("MESSAGE:", type(message))
+#
+#    message.template_id = SENDGRID_TEMPLATE_ID
+#
+#    message.dynamic_template_data = template_data
+#
+#    try:
+#        response = client.send(message)
+#        print("RESPONSE:", type(response))
+#        print(response.status_code)
+#        print(response.body)
+#        print(response.headers)
+#
+#    except Exception as e:
+#        print("OOPS", e)
+#    return message
