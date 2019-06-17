@@ -2,6 +2,7 @@
 
 import os
 import datetime
+import statistics
 from pprint import pprint
 
 from dotenv import load_dotenv
@@ -67,18 +68,19 @@ def format_products(selected_ids):  #> Formatting my selected products into text
     for product_id in selected_ids:
         matching_products = [item for item in products if item["id"] == product_id] #>convert string to integer for comparison reasons
         matching_product = matching_products[0]
-        text = text + '\n...' + matching_product["name"] + " " + str(matching_product["price"])
+        text += '\n...' + matching_product["name"] + " " + str(matching_product["price"])
     return text
 
 def final_price(selected_ids):
     subtotal = 0
     tax = 0
     total_price = 0
+    tax_rate = 0.0875
     for product_id in selected_ids:
         matching_products = [item for item in products if item["id"] == product_id] #>convert string to integer for comparison reasons
         matching_product = matching_products[0]
-        subtotal = subtotal + matching_product["price"]
-        tax = tax + subtotal * 0.0875
+        subtotal += matching_product["price"]
+        tax += matching_product["price"] * tax_rate
     total_price = tax + subtotal
     return subtotal, tax, total_price
     
