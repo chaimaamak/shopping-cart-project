@@ -114,7 +114,6 @@ def send_email (text, user_email):
     ]
 }
     client = SendGridAPIClient(SENDGRID_API_KEY)
-    print("CLIENT:", type(client))
     
     message = Mail(from_email= MY_ADDRESS, to_emails = user_email, subject='This is Your Email Receipt From Happy Foods', html_content=text)
     
@@ -122,7 +121,6 @@ def send_email (text, user_email):
     message.dynamic_template_data = template_data
     
     response = client.send(message)
-    print("RESPONSE:", type(response))
     print(response.status_code)
     print(response.body)
     print(response.headers)
