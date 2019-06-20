@@ -75,12 +75,11 @@ def final_price(selected_ids):
     subtotal = 0
     tax = 0
     total_price = 0
-    tax_rate = 0.0875
     for product_id in selected_ids:
         matching_products = [item for item in products if item["id"] == product_id] #>convert string to integer for comparison reasons
         matching_product = matching_products[0]
         subtotal += matching_product["price"]
-        tax += matching_product["price"] * tax_rate
+    tax = subtotal * 0.0875
     total_price = tax + subtotal
     return subtotal, tax, total_price
     
@@ -109,24 +108,33 @@ def send_email (text, user_email):
     SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID", "OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
     MY_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "OOPS, please set env var called 'MY_EMAIL_ADDRESS'")
     
+
     template_data = {
     "total_price_usd": str(total_usd),
     "human_friendly_timestamp": now.strftime("%Y-%m-%d %H:%M:%S\n"),
     "products":[p for p in products if str(p["id"]) == str(selected_ids)
-    ]
-}
-    client = SendGridAPIClient(SENDGRID_API_KEY)
+    ]}
     
-    message = Mail(from_email= MY_ADDRESS, to_emails = user_email, subject='This is Your Email Receipt From Happy Foods', html_content=text)
+    breakpoint()
+
+    client = SendGridAPIClient(SENDGRID_API_KEY)
+    print("CLIENT:", type(client))
+
+    message = Mail(from_email= MY_ADDRESS, to_emails = user_email)
+    print("MESSAGE:", type(message))
     
     message.template_id = SENDGRID_TEMPLATE_ID
     message.dynamic_template_data = template_data
-    
-    response = client.send(message)
-    print(response.status_code)
-    print(response.body)
-    print(response.headers)
-
+        
+    try:
+	    response = client.send(message)
+	    print("RESPONSE:", type(response))
+	    print(response.status_code)
+	    print(response.body)
+	    print(response.headers)
+	
+    except Exception as e:
+	    print("OOPS", e)
 
 while True:
     selected_ids = input_products()
@@ -151,47 +159,3 @@ while True:
     else:
         print ("Invalid Input. Try Again!")
     
-
-
-
-
-## EMAIL SETUP FUNCTION
-
-#def format_email(selected_ids):
-#
-#    load_dotenv()
-#
-#    SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
-#    SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID", "OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
-#    MY_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "OOPS, please set env var called 'MY_EMAIL_ADDRESS'")
-#
-#    #print("API KEY:", SENDGRID_API_KEY)
-#    #print("TEMPLATE ID:", SENDGRID_TEMPLATE_ID)
-#    #print("EMAIL ADDRESS:", MY_ADDRESS)
-#    
-#    template_data = {
-#        "total_price_usd": to_usd(total_price),
-#        "human_friendly_timestamp": now.strftime("%Y-%m-%d %H:%M:%S"),
-#        "products": print (format_products(selected_ids))
-#    }
-#
-#    client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
-#    print("CLIENT:", type(client))
-#
-#    message = Mail(from_email=MY_ADDRESS, to_emails = MY_ADDRESS)
-#    print("MESSAGE:", type(message))
-#
-#    message.template_id = SENDGRID_TEMPLATE_ID
-#
-#    message.dynamic_template_data = template_data
-#
-#    try:
-#        response = client.send(message)
-#        print("RESPONSE:", type(response))
-#        print(response.status_code)
-#        print(response.body)
-#        print(response.headers)
-#
-#    except Exception as e:
-#        print("OOPS", e)
-#    return message

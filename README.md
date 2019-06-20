@@ -36,8 +36,8 @@ pip install python-dotenv
 
 # Setup
 
-1. Describe setup notes for .csv file or Google sheets
-2. Describe setup required for email receipts - SendGrid guidelines
+1. Describe setup required for email receipts - SendGrid guidelines
+2. Setup a .env file for the "secret" keys
 
 
 ## Usage
